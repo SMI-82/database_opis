@@ -68,8 +68,7 @@ class Compiler
         $sql = 'INSERT INTO ';
         $sql .= $this->handleTables($insert->getTables());
         $sql .= ($columns === '*') ? '' : ' (' . $columns . ')';
-        $sql .= $this->handleInsertValues($insert->getValues());
-
+        $sql .= $this->handleInsertValues($insert);
         return $sql;
     }
 
@@ -509,13 +508,19 @@ class Compiler
     /**
      * Handle insert values
      *
-     * @param   array $values
+     * @param   SQLStatement $insert
      *
      * @return  string
      */
-    protected function handleInsertValues(array $values)
+    protected function handleInsertValues(SQLStatement $insert)
     {
-        return ' VALUES (' . $this->params($values) . ')';
+        $chunks = array_chunk($insert->getValues(), $insert->getRowCount());
+
+        $str = array_map(function ($value) {
+            return '(' . $this->params($value) . ')';
+        }, $chunks);
+
+        return ' VALUES '. implode(', ', $str);
     }
 
     /**

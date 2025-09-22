@@ -36,8 +36,8 @@ class InsertStatement
     }
 
     /**
-     * @internal
      * @return SQLStatement
+     * @internal
      */
     public function getSQLStatement(): SQLStatement
     {
@@ -50,10 +50,31 @@ class InsertStatement
      */
     public function insert(array $values): self
     {
-        foreach ($values as $column => $value) {
-            $this->sql->addColumn($column);
-            $this->sql->addValue($value);
+        $keys = array_keys($values);
+        $isAssoc = array_keys($keys) !== $keys;
+
+        if ($isAssoc) {
+            $this->sql->setRowCount(count(array_keys($values)));
+            foreach ($values as $column => $value) {
+                $this->sql->addColumn($column);
+                $this->sql->addValue($value);
+            }
         }
+        else {
+            $columns = array_keys($values[0]);
+            sort($columns);
+            $this->sql->setRowCount(count($columns));
+            foreach ($columns as $column) {
+                $this->sql->addColumn($column);
+            }
+
+            foreach ($values as $row) {
+                foreach ($columns as $column) {
+                    $this->sql->addValue($row[$column]);
+                }
+            }
+        }
+
 
         return $this;
     }

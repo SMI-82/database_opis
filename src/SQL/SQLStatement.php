@@ -21,6 +21,7 @@ use Closure;
 
 class SQLStatement
 {
+    protected $rowCount = 1;
     protected $wheres = [];
     protected $having = [];
     protected $joins = [];
@@ -154,7 +155,8 @@ class SQLStatement
      * @param string|Closure|Expression $column
      * @param string $separator
      */
-    public function addWhereNop($column, string $separator) {
+    public function addWhereNop($column, string $separator)
+    {
         $this->wheres[] = [
             'type' => 'whereNop',
             'column' => $column,
@@ -181,9 +183,9 @@ class SQLStatement
     }
 
     /**
-     * @param  string $type
-     * @param  string|array $table
-     * @param  Closure $closure
+     * @param string $type
+     * @param string|array $table
+     * @param Closure $closure
      */
     public function addJoinClause(string $type, $table, Closure $closure = null)
     {
@@ -209,8 +211,8 @@ class SQLStatement
     }
 
     /**
-     * @param   Closure $callback
-     * @param   string $separator
+     * @param Closure $callback
+     * @param string $separator
      */
     public function addHavingGroupCondition(Closure $callback, string $separator)
     {
@@ -225,10 +227,10 @@ class SQLStatement
     }
 
     /**
-     * @param   string|Closure|Expression $aggregate
-     * @param   mixed $value
-     * @param   string $operator
-     * @param   string $separator
+     * @param string|Closure|Expression $aggregate
+     * @param mixed $value
+     * @param string $operator
+     * @param string $separator
      */
     public function addHavingCondition($aggregate, $value, string $operator, string $separator)
     {
@@ -242,10 +244,10 @@ class SQLStatement
     }
 
     /**
-     * @param   string|Closure|Expression $aggregate
-     * @param   mixed $value
-     * @param   string $separator
-     * @param   bool $not
+     * @param string|Closure|Expression $aggregate
+     * @param mixed $value
+     * @param string $separator
+     * @param bool $not
      */
     public function addHavingInCondition($aggregate, $value, string $separator, bool $not)
     {
@@ -273,11 +275,11 @@ class SQLStatement
     }
 
     /**
-     * @param   string|Closure|Expression $aggregate
-     * @param   int $value1
-     * @param   int $value2
-     * @param   string $separator
-     * @param   bool $not
+     * @param string|Closure|Expression $aggregate
+     * @param int $value1
+     * @param int $value2
+     * @param string $separator
+     * @param bool $not
      */
     public function addHavingBetweenCondition($aggregate, $value1, $value2, string $separator, bool $not)
     {
@@ -528,6 +530,16 @@ class SQLStatement
     public function getValues(): array
     {
         return $this->values;
+    }
+
+    public function getRowCount()
+    {
+        return $this->rowCount;
+    }
+
+    public function setRowCount($value)
+    {
+        return $this->rowCount = $value;
     }
 
     /**
