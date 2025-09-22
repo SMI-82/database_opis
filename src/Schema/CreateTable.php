@@ -366,14 +366,17 @@ class CreateTable
     }
 
     /**
-     * @param string $createColumn
-     * @param string $updateColumn
      * @return $this
      */
-    public function timestamps(string $createColumn = 'created_at', string $updateColumn = 'updated_at'): self
+    public function timestamps($fields = []): self
     {
-        $this->dateTime($createColumn)->notNull();
-        $this->dateTime($updateColumn);
+        if (!is_array($fields))
+            $fields = [$fields];
+        foreach ($fields as $field)
+            $this->timestamp($field);
+
+        $this->timestamp('created_at');
+        $this->timestamp('updated_at');
         return $this;
     }
 }
