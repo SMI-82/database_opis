@@ -127,6 +127,14 @@ class BaseColumn
     }
 
     /**
+     * @return $this
+     */
+    public function nullable(): self
+    {
+        return $this->set('nullable', true);
+    }
+
+    /**
      * @param string $comment
      * @return $this
      */
