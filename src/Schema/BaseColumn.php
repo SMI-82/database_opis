@@ -132,7 +132,7 @@ class BaseColumn
      */
     public function description(string $comment): self
     {
-        return $this->set('description', $comment);
+        return $this->set('comment', $comment);
     }
 
     /**

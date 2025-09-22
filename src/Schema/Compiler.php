@@ -31,7 +31,7 @@ class Compiler
     protected $params = [];
 
     /** @var string[] */
-    protected $modifiers = ['unsigned', 'nullable', 'default', 'autoincrement'];
+    protected $modifiers = ['unsigned', 'nullable', 'default', 'autoincrement', 'comment'];
 
     /** @var string[] */
     protected $serials = ['tiny', 'small', 'normal', 'medium', 'big'];
@@ -308,6 +308,15 @@ class Compiler
     protected function handleModifierDefault(BaseColumn $column): string
     {
         return null === $column->get('default') ? '' : 'DEFAULT ' . $this->value($column->get('default'));
+    }
+
+    /**
+     * @param BaseColumn $column
+     * @return string
+     */
+    protected function handleModifierComment(BaseColumn $column): string
+    {
+        return $column->get('comment') ? ' COMMENT \'' . $column->get('comment') . '\'' : '';
     }
 
     /**
