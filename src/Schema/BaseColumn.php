@@ -136,6 +136,15 @@ class BaseColumn
     }
 
     /**
+     * @param string $value
+     * @return $this
+     */
+    public function collate(string $value): self
+    {
+        return $this->set('collate', $value);
+    }
+
+    /**
      * @return $this
      */
     public function onUpdateCurrentTimeStamp(): self

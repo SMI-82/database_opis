@@ -31,7 +31,7 @@ class Compiler
     protected $params = [];
 
     /** @var string[] */
-    protected $modifiers = ['unsigned', 'nullable', 'default', 'autoincrement', 'comment', 'onUpdateCurrentTimeStamp'];
+    protected $modifiers = ['unsigned', 'nullable', 'default', 'autoincrement', 'comment', 'onUpdateCurrentTimeStamp', 'collate'];
 
     /** @var string[] */
     protected $serials = ['tiny', 'small', 'normal', 'medium', 'big'];
@@ -332,6 +332,15 @@ class Compiler
      * @param BaseColumn $column
      * @return string
      */
+    protected function handleModifierCollate(BaseColumn $column): string
+    {
+        return $column->get('collate') ? ' COLLATE ' . $column->get('collate') : '';
+    }
+
+    /**
+     * @param BaseColumn $column
+     * @return string
+     */
     protected function handleModifierAutoincrement(BaseColumn $column): string
     {
         if ($column->getType() !== 'integer' || !in_array($column->get('size', 'normal'), $this->serials)) {
@@ -570,6 +579,7 @@ class Compiler
      * @param $data
      * @return string
      */
+
     protected function handleSetDefaultValue(AlterTable $table, $data): string
     {
         return 'ALTER TABLE ' . $this->wrap($table->getTableName()) . ' ALTER COLUMN '
