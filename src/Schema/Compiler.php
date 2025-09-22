@@ -31,7 +31,7 @@ class Compiler
     protected $params = [];
 
     /** @var string[] */
-    protected $modifiers = ['unsigned', 'nullable', 'default', 'autoincrement', 'comment'];
+    protected $modifiers = ['unsigned', 'nullable', 'default', 'autoincrement', 'comment', 'onUpdateCurrentTimeStamp'];
 
     /** @var string[] */
     protected $serials = ['tiny', 'small', 'normal', 'medium', 'big'];
@@ -258,7 +258,7 @@ class Compiler
      */
     protected function handleTypeTimestamp(BaseColumn $column): string
     {
-        return 'TIMESTAMP';
+        return ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP() ';
     }
 
     /**
@@ -317,6 +317,15 @@ class Compiler
     protected function handleModifierComment(BaseColumn $column): string
     {
         return $column->get('comment') ? ' COMMENT \'' . $column->get('comment') . '\'' : '';
+    }
+
+    /**
+     * @param BaseColumn $column
+     * @return string
+     */
+    protected function handleModifierOnUpdateCurrentTimeStamp(BaseColumn $column): string
+    {
+        return $column->get('onUpdateCurrentTimeStamp') ? ' ON UPDATE CURRENT_TIMESTAMP() ' : '';
     }
 
     /**

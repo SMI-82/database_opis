@@ -136,6 +136,14 @@ class BaseColumn
     }
 
     /**
+     * @return $this
+     */
+    public function onUpdateCurrentTimeStamp(): self
+    {
+        return $this->set('onUpdateCurrentTimeStamp', 1);
+    }
+
+    /**
      * @param $value
      * @return $this
      */
